@@ -1,2 +1,4 @@
 # FlatMateWeb
-FlatMate's Web
+FlatMate's Web Application.
+
+Manage your flat with ease.
