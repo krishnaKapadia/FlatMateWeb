@@ -8,6 +8,11 @@ export default {
       //   variant: 'info',
       //   text: 'NEW'
       // }
+    },
+    {
+      name: 'Chores',
+      url: '/chores',
+      icon: 'icon-event'
     }
   ]
 };
