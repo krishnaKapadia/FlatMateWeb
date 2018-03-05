@@ -3,7 +3,7 @@ import {
   Row, Col, Card, CardHeader, CardBody, CardFooter, Button,
   Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
-import firebase from "../../utils/firebase/firebase";
+import firebase, { getChores } from "../../utils/firebase/firebase";
 
 class Chores extends Component {
   // TODO adding a new chore automatically updates the firebase db, not good!
@@ -24,23 +24,22 @@ class Chores extends Component {
   }
 
   componentWillMount() {
-    var chores = this.state.chores;
-    var size = 0;
-
-    this.flat.once('value', (snapshot) => {
-
-      snapshot.forEach((choreObj) => {
-        chores.push({
-          editable: false,
-          chore: choreObj.val().chore,
-          flatmate: choreObj.val().flatmate,
-          time: ''
-        });
-        size++;
-      });
-
-      this.setState({ chores, size });
-    });
+    var choresObj = getChores('-L6otCkBCNUL6n0dcSz1');
+    // this.flat.once('value', (snapshot) => {
+    //
+    //   snapshot.forEach((choreObj) => {
+    //     chores.push({
+    //       editable: false,
+    //       chore: choreObj.val().chore,
+    //       flatmate: choreObj.val().flatmate,
+    //       time: ''
+    //     });
+    //     size++;
+    //   });
+    //
+    console.log(choresObj);
+      // this.setState({ chores: choresObj.chores, size: choresObj.size });
+    // });
 
   }
 
@@ -76,11 +75,11 @@ class Chores extends Component {
   */
   submitChore(chore) {
     // Create new chore obj
-    chore.flatmate = {
-      fullName: this.state.selectedFlatMate
-    }
+    // chore.flatmate = {
+    //   fullName: this.state.selectedFlatMate
+    // }
     // Submit
-    this.flat.push(chore);
+    // this.flat.push(chore);
     // Clear fields
   }
 
