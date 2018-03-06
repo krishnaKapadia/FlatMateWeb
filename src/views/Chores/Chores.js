@@ -13,33 +13,35 @@ class Chores extends Component {
       chores: [],
       size: 0,
       dropdownOpen: false,
+      addMode: false,
       selectedFlatMate: '',
       newChoreTitle: ''
     }
 
-    let flatId = '-L6otCkBCNUL6n0dcSz1';
-    this.flat = firebase.database().ref(`Flats/${flatId}/Chores`);
+    this.flatId = '-L6otCkBCNUL6n0dcSz1';
+    this.flat = firebase.database().ref(`Flats/${this.flatId}/Chores`);
     this.addChore = this.addChore.bind(this);
+    this.setChoreTitle = this.setChoreTitle.bind(this);
     this.toggle = this.toggle.bind(this);
   }
 
   componentWillMount() {
-    var choresObj = getChores('-L6otCkBCNUL6n0dcSz1');
-    // this.flat.once('value', (snapshot) => {
-    //
-    //   snapshot.forEach((choreObj) => {
-    //     chores.push({
-    //       editable: false,
-    //       chore: choreObj.val().chore,
-    //       flatmate: choreObj.val().flatmate,
-    //       time: ''
-    //     });
-    //     size++;
-    //   });
-    //
-    console.log(choresObj);
-      // this.setState({ chores: choresObj.chores, size: choresObj.size });
-    // });
+      var chores = [];
+      var size = 0;
+
+    this.flat.once('value', (snapshot) => {
+
+      snapshot.forEach((choreObj) => {
+        chores.push({
+          chore: choreObj.val().chore,
+          flatmate: choreObj.val().flatmate,
+          time: ''
+        });
+        size++;
+      });
+
+       this.setState({ chores, size });
+    });
 
   }
 
@@ -75,12 +77,21 @@ class Chores extends Component {
   */
   submitChore(chore) {
     // Create new chore obj
-    // chore.flatmate = {
-    //   fullName: this.state.selectedFlatMate
-    // }
+    chore.flatmate = {
+      fullName: this.state.selectedFlatMate,
+      editable: false
+    }
+
     // Submit
-    // this.flat.push(chore);
+    // this.flat.child(chore.chore).set(chore);
+    var chores = this.state.chores;
+    chores.push(chore);
+    // console.log(chore);
+
+    this.setState({ chores, selectedFlatMate: '', newChoreTitle: '' });
+
     // Clear fields
+    this.toggle();
   }
 
   render() {
@@ -106,7 +117,7 @@ class Chores extends Component {
               <CardBody>
                 <Row>
                   <Col>
-                    <Button className="fullWidthButton" color="primary" onClick={this.addChore}>Add Chore</Button>
+                    <Button className="fullWidthButton" color="primary" onClick={() => this.addChore()}>Add Chore</Button>
                   </Col>
                 </Row>
               </CardBody>
@@ -116,6 +127,7 @@ class Chores extends Component {
         </Row>
 
         <Row>
+
         {
           this.state.chores.map((chore) => {
             if(chore.editable) {
@@ -134,19 +146,17 @@ class Chores extends Component {
                         <DropdownMenu>
                           <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Harrison Bacordo' })}>Harrison Bacordo</DropdownItem>
                           <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Krishna Kapadia' })}>Krishna Kapadia</DropdownItem>
-                          {/* <DropdownItem divider /> */}
-                          <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Mia Khalifa' })}>Mia Khalifa</DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
                     </CardBody>
                     <CardFooter>
                       {/* Due in: { chore.time } */}
-                      <Button color="primary" className="fullWidthButton" onClick={this.submitChore(chore)}>Save chore</Button>
+                      <Button color="primary" className="fullWidthButton" onClick={() => this.submitChore(chore)}>Save chore</Button>
                     </CardFooter>
                   </Card>
                 </Col>
               )
-            } else {
+          } else {
               total_num++;
               return(
                 <Col className="animated fadeIn" key={total_num} xs="12" md="3">
