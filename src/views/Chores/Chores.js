@@ -61,21 +61,21 @@ class Chores extends Component {
   */
   addChore() {
     const emptyChore = {
-      editable: true,
       chore: '',
       flatmate: {}
     }
 
     var chores = this.state.chores;
-    chores.push(emptyChore);
+    // chores.push(emptyChore);
 
-    this.setState({ chores });
+    this.setState({ chores, size: this.state.size + 1, addMode: true });
   }
 
   /**
   * Submits the new chore to firebase and then clears the fields
   */
   submitChore(chore) {
+    this.setState({ addMode: false });
     // Create new chore obj
     chore.flatmate = {
       fullName: this.state.selectedFlatMate,
@@ -86,7 +86,6 @@ class Chores extends Component {
     // this.flat.child(chore.chore).set(chore);
     var chores = this.state.chores;
     chores.push(chore);
-    // console.log(chore);
 
     this.setState({ chores, selectedFlatMate: '', newChoreTitle: '' });
 
@@ -117,7 +116,12 @@ class Chores extends Component {
               <CardBody>
                 <Row>
                   <Col>
-                    <Button className="fullWidthButton" color="primary" onClick={() => this.addChore()}>Add Chore</Button>
+                    {
+                      !this.state.addMode && <Button className="fullWidthButton animated fadeIn" color="primary" onClick={() => this.addChore()}>Add Chore</Button>
+                    }
+                    {
+                      this.state.addMode && <Button className="fullWidthButton animated fadeIn" disabled color="primary" onClick={() => this.addChore()}>Add Chore</Button>
+                    }
                   </Col>
                 </Row>
               </CardBody>
@@ -129,54 +133,54 @@ class Chores extends Component {
         <Row>
 
         {
+          // First render all remaining chores and then render the new chore
           this.state.chores.map((chore) => {
-            if(chore.editable) {
-              return(
-                <Col className="animated fadeIn" key={total_num} xs="12" md="3">
-                  <Card>
-                    <CardHeader>
-                      <Input name="chore" placeholder="Chore Title" onChange={this.setChoreTitle} />
-                    </CardHeader>
-                    <CardBody>
-                      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle caret>
-                          { this.state.selectedFlatMate !== '' && this.state.selectedFlatMate }
-                          { this.state.selectedFlatMate === '' && <p>Select flat mate</p> }
-                        </DropdownToggle>
-                        <DropdownMenu>
-                          <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Harrison Bacordo' })}>Harrison Bacordo</DropdownItem>
-                          <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Krishna Kapadia' })}>Krishna Kapadia</DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </CardBody>
-                    <CardFooter>
-                      {/* Due in: { chore.time } */}
-                      <Button color="primary" className="fullWidthButton" onClick={() => this.submitChore(chore)}>Save chore</Button>
-                    </CardFooter>
-                  </Card>
-                </Col>
-              )
-          } else {
-              total_num++;
-              return(
-                <Col className="animated fadeIn" key={total_num} xs="12" md="3">
-                  <Card>
-                    <CardHeader>
-                      { chore.flatmate.fullName }
-                    </CardHeader>
-                    <CardBody>
-                      {/* TODO: change to chore title on backend */}
-                      { chore.chore }
-                    </CardBody>
-                    <CardFooter>
-                      Due in: { chore.time }
-                    </CardFooter>
-                  </Card>
-                </Col>
-              )
-            }
+            total_num++;
+            return(
+              <Col className="animated fadeIn" key={total_num} xs="12" md="3">
+                <Card>
+                  <CardHeader>
+                    { chore.flatmate.fullName }
+                  </CardHeader>
+                  <CardBody>
+                    {/* TODO: change to chore title on backend */}
+                    { chore.chore }
+                  </CardBody>
+                  <CardFooter>
+                    Due in: { chore.time }
+                  </CardFooter>
+                </Card>
+              </Col>
+            )
           })
+        }
 
+        {
+          // Render the new add chore
+          this.state.addMode &&
+            <Col className="animated fadeIn" key={total_num} xs="12" md="3">
+              <Card>
+                <CardHeader>
+                  <Input name="chore" placeholder="Chore Title" onChange={this.setChoreTitle} />
+                </CardHeader>
+                <CardBody>
+                  <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                    <DropdownToggle caret>
+                      { this.state.selectedFlatMate !== '' && this.state.selectedFlatMate }
+                      { this.state.selectedFlatMate === '' && <p>Select flat mate</p> }
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Harrison Bacordo' })}>Harrison Bacordo</DropdownItem>
+                      <DropdownItem onClick={() => this.setState({ selectedFlatMate: 'Krishna Kapadia' })}>Krishna Kapadia</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </CardBody>
+                <CardFooter>
+                  {/* Due in: { chore.time } */}
+                  <Button color="primary" className="fullWidthButton" onClick={() => this.submitChore(this.state.chores[0])}>Save chore</Button>
+                </CardFooter>
+              </Card>
+            </Col>
         }
         </Row>
 
