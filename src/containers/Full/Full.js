@@ -9,6 +9,8 @@ import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/';
 import Chores from '../../views/Chores/Chores';
+import GroceryList from '../../views/GroceryList/GroceryList';
+import FlatMates from '../../views/FlatMates/FlatMates';
 
 class Full extends Component {
   render() {
@@ -21,8 +23,10 @@ class Full extends Component {
             <Breadcrumb />
             <Container fluid>
               <Switch>
-                <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route path="/dashboard" name="Dashboard" component={Dashboard} />
                 <Route path="/chores" name="Chores" component={Chores} />
+                <Route path="/groceries" name="Groceries" component={GroceryList} />
+                <Route path="/FlatMates" name="FlatMates" component={FlatMates} />
                 <Redirect from="/" to="/dashboard"/>
               </Switch>
             </Container>
