@@ -45,6 +45,9 @@ class Chores extends Component {
 
   }
 
+  /**
+  * Sets the title of the new chore
+  */
   setChoreTitle(e) {
     this.setState({ newChoreTitle: e.target.value });
   }
@@ -74,12 +77,14 @@ class Chores extends Component {
   /**
   * Submits the new chore to firebase and then clears the fields
   */
-  submitChore(chore) {
+  submitChore() {
     this.setState({ addMode: false });
     // Create new chore obj
-    chore.flatmate = {
-      fullName: this.state.selectedFlatMate,
-      editable: false
+    let chore = {
+      flatmate:{
+          fullName: this.state.selectedFlatMate
+      },
+      chore: this.state.newChoreTitle
     }
 
     // Submit
@@ -88,7 +93,7 @@ class Chores extends Component {
     chores.push(chore);
 
     this.setState({ chores, selectedFlatMate: '', newChoreTitle: '' });
-
+    this.flat.child(chore.chore).update(chore);
     // Clear fields
     this.toggle();
   }
@@ -177,7 +182,7 @@ class Chores extends Component {
                 </CardBody>
                 <CardFooter>
                   {/* Due in: { chore.time } */}
-                  <Button color="primary" className="fullWidthButton" onClick={() => this.submitChore(this.state.chores[0])}>Save chore</Button>
+                  <Button color="primary" className="fullWidthButton" onClick={() => this.submitChore()}>Save chore</Button>
                 </CardFooter>
               </Card>
             </Col>
