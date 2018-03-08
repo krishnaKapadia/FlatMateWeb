@@ -15,33 +15,28 @@ Firebase.initializeApp(config);
 database = Firebase.database();
 export default Firebase;
 
-export const getChores = (flatId) => {
-  database.ref(`Flats/${flatId}/Chores`).once('value', (snapshot) => {
-    var chores = [];
-    var size = 0;
+/**
+* Returns a promise holding an object containing chores and size obj
+*/
+export function getChores(flatId) {
+  return new Promise((resolve, reject) => {
+    let obj = {
+      chores: [],
+      size: 0
+    }
 
-<<<<<<< HEAD
-=======
-  database.ref(`Flats/${flatId}/Chores`).once('value').then((snapshot) => {
->>>>>>> 1870f7525bbd08ec5e5d8d0de1deb4b7f649b123
-    snapshot.forEach((choreObj) => {
-      chores.push({
-        chore: choreObj.val().chore,
-        flatmate: choreObj.val().flatmate,
-        time: ''
+    database.ref(`Flats/${flatId}/Chores`).once('value').then((snapshot) => {
+      snapshot.forEach((choreObj) => {
+        obj.chores.push({
+          chore: choreObj.val().chore,
+          flatmate: choreObj.val().flatmate,
+          time: ''
+        });
+        obj.size++;
       });
-      size++;
+      resolve(obj);
+    }).catch((err) => {
+      if(err) reject(err);
     });
-
-<<<<<<< HEAD
-    // console.log(chores);
-    return {
-      chores: chores,
-      size: size
-    };
-=======
-    return obj;
->>>>>>> 1870f7525bbd08ec5e5d8d0de1deb4b7f649b123
   });
-
 }
