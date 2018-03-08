@@ -28,7 +28,7 @@ class Chores extends Component {
   componentWillMount() {
     var chores = [];
     var size = 0;
-
+    // TODO Calendar http://intljusticemission.github.io/react-big-calendar/examples/index.html#intro
     getChores(this.flatId).then((choresObj) => {
       this.setState({ chores: choresObj.chores, size: choresObj.size });
     }).catch((err) => {
@@ -60,7 +60,6 @@ class Chores extends Component {
     }
 
     var chores = this.state.chores;
-    // chores.push(emptyChore);
 
     this.setState({ chores, size: this.state.size + 1, addMode: true });
   }
@@ -70,6 +69,7 @@ class Chores extends Component {
   */
   submitChore() {
     this.setState({ addMode: false });
+
     // Create new chore obj
     let chore = {
       flatmate:{
@@ -79,7 +79,6 @@ class Chores extends Component {
     }
 
     // Submit
-    // this.flat.child(chore.chore).set(chore);
     var chores = this.state.chores;
     chores.push(chore);
 
