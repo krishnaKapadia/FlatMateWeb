@@ -21,7 +21,7 @@ export const getChores = (flatId) => {
     size: 0
   }
 
-  database.ref(`Flats/${flatId}/Chores`).once('value',(snapshot) => {
+  database.ref(`Flats/${flatId}/Chores`).once('value').then((snapshot) => {
     snapshot.forEach((choreObj) => {
       obj.chores.push({
         editable: false,
@@ -31,6 +31,8 @@ export const getChores = (flatId) => {
       });
       obj.size++;
     });
+
     return obj;
   });
+
 }
