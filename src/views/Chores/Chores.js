@@ -6,7 +6,7 @@ import {
 import firebase, { getChores } from "../../utils/firebase/firebase";
 
 class Chores extends Component {
-  // TODO adding a new chore automatically updates the firebase db, not good!
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,22 +26,25 @@ class Chores extends Component {
   }
 
   componentWillMount() {
-      var chores = [];
-      var size = 0;
-
-    this.flat.once('value', (snapshot) => {
-
-      snapshot.forEach((choreObj) => {
-        chores.push({
-          chore: choreObj.val().chore,
-          flatmate: choreObj.val().flatmate,
-          time: ''
-        });
-        size++;
-      });
-
-       this.setState({ chores, size });
-    });
+    //   var chores = [];
+    //   var size = 0;
+    //
+    // this.flat.once('value', (snapshot) => {
+    //
+    //   snapshot.forEach((choreObj) => {
+    //     chores.push({
+    //       chore: choreObj.val().chore,
+    //       flatmate: choreObj.val().flatmate,
+    //       time: ''
+    //     });
+    //     size++;
+    //   });
+    //
+    //    this.setState({ chores, size });
+    // });
+    // const choreObj = getChores(this.flatId);
+    console.log(getChores(this.flatId));
+    // this.setState({ chores: choreObj.chores, size: choreObj.size });
 
   }
 

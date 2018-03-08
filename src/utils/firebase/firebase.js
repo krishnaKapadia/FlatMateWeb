@@ -16,21 +16,23 @@ database = Firebase.database();
 export default Firebase;
 
 export const getChores = (flatId) => {
-  let obj = {
-    chores: [],
-    size: 0
-  }
+  database.ref(`Flats/${flatId}/Chores`).once('value', (snapshot) => {
+    var chores = [];
+    var size = 0;
 
-  database.ref(`Flats/${flatId}/Chores`).once('value',(snapshot) => {
     snapshot.forEach((choreObj) => {
-      obj.chores.push({
-        editable: false,
+      chores.push({
         chore: choreObj.val().chore,
         flatmate: choreObj.val().flatmate,
         time: ''
       });
-      obj.size++;
+      size++;
     });
-    return obj;
+
+    // console.log(chores);
+    return {
+      chores: chores,
+      size: size
+    };
   });
 }
