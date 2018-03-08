@@ -26,9 +26,15 @@ class Chores extends Component {
   }
 
   componentWillMount() {
+<<<<<<< HEAD
     //   var chores = [];
     //   var size = 0;
     //
+=======
+    var chores = [];
+    var size = 0;
+
+>>>>>>> 1870f7525bbd08ec5e5d8d0de1deb4b7f649b123
     // this.flat.once('value', (snapshot) => {
     //
     //   snapshot.forEach((choreObj) => {
@@ -42,10 +48,14 @@ class Chores extends Component {
     //
     //    this.setState({ chores, size });
     // });
+<<<<<<< HEAD
     // const choreObj = getChores(this.flatId);
     console.log(getChores(this.flatId));
     // this.setState({ chores: choreObj.chores, size: choreObj.size });
 
+=======
+    console.log(getChores(this.flatId));
+>>>>>>> 1870f7525bbd08ec5e5d8d0de1deb4b7f649b123
   }
 
   /**

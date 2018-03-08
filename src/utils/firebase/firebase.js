@@ -20,6 +20,10 @@ export const getChores = (flatId) => {
     var chores = [];
     var size = 0;
 
+<<<<<<< HEAD
+=======
+  database.ref(`Flats/${flatId}/Chores`).once('value').then((snapshot) => {
+>>>>>>> 1870f7525bbd08ec5e5d8d0de1deb4b7f649b123
     snapshot.forEach((choreObj) => {
       chores.push({
         chore: choreObj.val().chore,
@@ -29,10 +33,15 @@ export const getChores = (flatId) => {
       size++;
     });
 
+<<<<<<< HEAD
     // console.log(chores);
     return {
       chores: chores,
       size: size
     };
+=======
+    return obj;
+>>>>>>> 1870f7525bbd08ec5e5d8d0de1deb4b7f649b123
   });
+
 }
