@@ -40,3 +40,38 @@ export function getChores(flatId) {
     });
   });
 }
+
+/**
+* Returns a promsie holding an object that contains all the faltmates associated
+* with the flatid
+*/
+export function getFlatMates(flatId) {
+
+  return new Promise((resolve, reject) => {
+    let container = {
+      flatmates: [],
+      size: 0
+    }
+
+    var count = 0;
+
+    database.ref(`Flats/${flatId}/Flatmates`).once('value').then((snapshot) => {
+      snapshot.forEach((flatmate) => {
+        const data = flatmate.val();
+
+        container.flatmates.push({
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          fullName: data.fullName,
+          flatKey: data.flatKey
+          // flatmate
+        });
+        container.size++;
+      });
+      resolve(container);
+    }).catch((err) => {
+      if(err) return reject(err);
+    })
+  })
+}
