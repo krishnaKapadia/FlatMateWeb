@@ -13,7 +13,31 @@ const config = {
 
 Firebase.initializeApp(config);
 database = Firebase.database();
+
+// Messaging setup
+
+// Token request
+const messageService = Firebase.messaging();
+messageService.requestPermission().then(() => {
+  console.log("Permission Granted");
+  return messageService.getToken();
+}).then((token) => {
+  console.log(token);
+}).catch((err) => {
+  if(err) console.log(err);
+})
+
+
 export default Firebase;
+
+
+
+
+
+
+
+// TODO refactor these methods into a different folder and file
+
 
 /**
 * Returns a promise holding an object containing chores and size obj

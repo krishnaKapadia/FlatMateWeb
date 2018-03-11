@@ -28,7 +28,7 @@ class Chores extends Component {
   componentWillMount() {
     var chores = [];
     var size = 0;
-    // TODO Calendar http://intljusticemission.github.io/react-big-calendar/examples/index.html#intro
+
     getChores(this.flatId).then((choresObj) => {
       this.setState({ chores: choresObj.chores, size: choresObj.size });
     }).catch((err) => {
