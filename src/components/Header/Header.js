@@ -8,8 +8,15 @@ import {
   NavLink,
   Badge,
 } from 'reactstrap';
+import auth, { signOut } from '../../utils/firebase/auth';
 
 class Header extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.logout = this.logout.bind(this);
+  }
 
   sidebarToggle(e) {
     e.preventDefault();
@@ -29,6 +36,19 @@ class Header extends Component {
   asideToggle(e) {
     e.preventDefault();
     document.body.classList.toggle('aside-menu-hidden');
+  }
+
+  logout(e) {
+    e.preventDefault();
+    console.log("LOGOUT");
+
+    var _this = this;
+    auth.onAuthStateChanged((user) => {
+      if(user) {
+        console.log("WORKS");
+        _this.props.history.push('/login');
+      }
+    })
   }
 
   render() {
@@ -55,7 +75,7 @@ class Header extends Component {
           </NavItem>
 
           <NavItem>
-              <NavLink href="#">Log out</NavLink>
+              <NavLink href="#" onClick={this.logout}>Log out</NavLink>
           </NavItem>
 
         </Nav>

@@ -3,6 +3,8 @@ const routes = {
   '/dashboard': 'Dashboard',
   '/chores': 'Chores',
   '/groceries': "Groceries",
-  '/flatmates': "Flat Mates"
+  '/flatmates': "Flat Mates",
+  '/login': "Login",
+  '/register': "Register"
 };
 export default routes;
