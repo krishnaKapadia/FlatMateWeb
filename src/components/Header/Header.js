@@ -9,6 +9,11 @@ import {
   Badge,
 } from 'reactstrap';
 import auth, { signOut } from '../../utils/firebase/auth';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { setLogin } from '../../Redux/Actions/actions';
+import PropTypes from 'prop-types';
+import {persistStore} from 'redux-persist';
 
 class Header extends Component {
 
@@ -45,7 +50,8 @@ class Header extends Component {
     var _this = this;
     auth.onAuthStateChanged((user) => {
       if(user) {
-        console.log("WORKS");
+        // TODO set login is not defined in this scope
+        // _this.props.setLogin(false);
         _this.props.history.push('/login');
       }
     })
@@ -91,4 +97,27 @@ class Header extends Component {
   }
 }
 
-export default Header;
+/**
+* Sets props to be accessed by the Header component from redux
+* global state. Variables & Objects
+*/
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.isLoggedIn
+  }
+}
+
+/**
+* Sets action functions to be used by the Header component through props.
+* Functions
+*/
+function mapDispatchToProps(dispatch) {
+  // When setLogin is called, result is passed to all reducers
+  return bindActionCreators({ setLogin: setLogin }, dispatch);
+}
+
+Header.contextTypes = {
+  store: PropTypes.object
+};
+
+export default connect()(Header);

@@ -7,6 +7,9 @@ import { loginWithLocalCredentials } from '../../utils/firebase/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import Spinner from 'react-spinkit';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { setLogin } from '../../Redux/Actions/actions';
 
 class Login extends Component {
 
@@ -33,6 +36,7 @@ class Login extends Component {
 
     loginWithLocalCredentials(userCredentials.email, userCredentials.password).then((user) => {
       this.setState({ loading: false });
+      this.props.setLogin(true);
       this.props.history.push('/dashboard');
       console.log(user);
     }).catch((err) => {
@@ -72,7 +76,7 @@ class Login extends Component {
 
                     <Form onSubmit={this.handleSubmit}>
                       <InputGroup className="mb-3">
-                        <InputGroupAddon className='input-group-prepend'><i className="icon-user input-group-text"></i></InputGroupAddon>
+                        <InputGroupAddon className='input-group-prepend'><i className="icon-envelope input-group-text"></i></InputGroupAddon>
                         <Input type="text" placeholder="email" name="email" required/>
                       </InputGroup>
 
@@ -119,4 +123,23 @@ class Login extends Component {
   }
 }
 
-export default Login;
+/**
+* Sets props to be accessed by the Login component from redux
+* global state, Variables & Objects
+*/
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.isLoggedIn,
+  }
+}
+
+/**
+* Sets action functions to be used by the Login component through props
+* Functions
+*/
+function mapDispatchToProps(dispatch) {
+  // When setLogin is called, result is passed to all reducers
+  return bindActionCreators({ setLogin: setLogin }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

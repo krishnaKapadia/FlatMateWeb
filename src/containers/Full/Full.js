@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Link, Switch, Route, Redirect} from 'react-router-dom';
 import {Container} from 'reactstrap';
+import { connect } from 'react-redux';
+
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
 import Breadcrumb from '../../components/Breadcrumb/';
@@ -16,6 +18,17 @@ import FlatMates from '../../views/FlatMates/FlatMates';
 
 // TODO sessions after login, probably use redux to store user logged in state
 class Full extends Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillMount() {
+    if(this.props.isLoggedIn) {
+      console.log(this.props.isLoggedIn);
+    }
+  }
+
   render() {
     return (
       <div className="app">
@@ -45,4 +58,15 @@ class Full extends Component {
   }
 }
 
-export default Full;
+/**
+* Sets props to be accessed by the component from redux
+* global state
+*/
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.isLoggedIn
+  }
+}
+
+// Global store connection
+export default connect(mapStateToProps)(Full);
