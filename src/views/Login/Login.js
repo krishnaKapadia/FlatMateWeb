@@ -4,12 +4,13 @@ import {
   InputGroup, InputGroupAddon, Form, FormFeedback }
 from 'reactstrap';
 import { loginWithLocalCredentials } from '../../utils/firebase/auth';
+import { getUser } from '../../utils/firebase/firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import Spinner from 'react-spinkit';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { setLogin } from '../../Redux/Actions/actions';
+import { setLogin, setLocalUser } from '../../Redux/Actions/actions';
 
 class Login extends Component {
 
@@ -37,8 +38,14 @@ class Login extends Component {
     loginWithLocalCredentials(userCredentials.email, userCredentials.password).then((user) => {
       this.setState({ loading: false });
       this.props.setLogin(true);
-      this.props.history.push('/dashboard');
-      console.log(user);
+
+      var _this = this;
+      getUser(user.uid).then((user_data) => {
+        _this.props.setLocalUser(user_data);
+        this.props.history.push('/flatmates');
+      }).catch((err) => {
+        if(err) console.log(err);
+      })
     }).catch((err) => {
       this.setState({ loading: false, error: err.message });
       if(err) console.log(err);
@@ -129,7 +136,7 @@ class Login extends Component {
 */
 function mapStateToProps(state) {
   return {
-    isLoggedIn: state.isLoggedIn,
+    isLoggedIn: state.isLoggedIn, local_user: state.local_user
   }
 }
 
@@ -139,7 +146,7 @@ function mapStateToProps(state) {
 */
 function mapDispatchToProps(dispatch) {
   // When setLogin is called, result is passed to all reducers
-  return bindActionCreators({ setLogin: setLogin }, dispatch);
+  return bindActionCreators({ setLogin: setLogin, setLocalUser: setLocalUser }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

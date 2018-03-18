@@ -4,6 +4,7 @@ import {
   Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 import firebase, { getChores } from "../../utils/firebase/firebase";
+import { connect } from 'react-redux';
 
 class Chores extends Component {
 
@@ -18,7 +19,6 @@ class Chores extends Component {
       newChoreTitle: ''
     }
 
-    this.flatId = '-L6otCkBCNUL6n0dcSz1';
     this.flat = firebase.database().ref(`Flats/${this.flatId}/Chores`);
     this.addChore = this.addChore.bind(this);
     this.setChoreTitle = this.setChoreTitle.bind(this);
@@ -29,7 +29,7 @@ class Chores extends Component {
     var chores = [];
     var size = 0;
 
-    getChores(this.flatId).then((choresObj) => {
+    getChores(this.props.local_user.flatKey).then((choresObj) => {
       this.setState({ chores: choresObj.chores, size: choresObj.size });
     }).catch((err) => {
       console.log(`Error ${err}`);
@@ -83,7 +83,7 @@ class Chores extends Component {
     chores.push(chore);
 
     this.setState({ chores, selectedFlatMate: '', newChoreTitle: '' });
-    this.flat.child(chore.chore).update(chore);
+    firebase.firestore().collection(`Flats/${this.props.local_user.flatKey}/Chores`).doc(chore.chore).set(chore);
     // Clear fields
     this.toggle();
   }
@@ -185,4 +185,14 @@ class Chores extends Component {
 
 }
 
-export default Chores;
+/**
+* Sets props to be accessed by the Login component from redux
+* global state, Variables & Objects
+*/
+function mapStateToProps(state) {
+  return {
+    local_user: state.local_user
+  }
+}
+
+export default connect(mapStateToProps)(Chores);

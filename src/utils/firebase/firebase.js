@@ -1,5 +1,8 @@
 // Firebase Config
 import * as Firebase from 'firebase';
+require("firebase/firestore");
+
+
 var database;
 
 const config = {
@@ -12,7 +15,7 @@ const config = {
 };
 
 Firebase.initializeApp(config);
-database = Firebase.database();
+database = Firebase.firestore();
 // Messaging setup
 
 // Token request
@@ -44,11 +47,11 @@ export function getChores(flatId) {
       size: 0
     }
 
-    database.ref(`Flats/${flatId}/Chores`).once('value').then((snapshot) => {
+    database.collection(`Flats/${flatId}/Chores`).get().then((snapshot) => {
       snapshot.forEach((choreObj) => {
         obj.chores.push({
-          chore: choreObj.val().chore,
-          flatmate: choreObj.val().flatmate,
+          chore: choreObj.data().chore,
+          flatmate: choreObj.data().flatmate,
           time: ''
         });
         obj.size++;
@@ -57,6 +60,23 @@ export function getChores(flatId) {
     }).catch((err) => {
       if(err) reject(err);
     });
+  });
+}
+
+/**
+* Given the user id, get the corresponding user from the database
+*/
+export function getUser(userId) {
+  return new Promise((resolve, reject) => {
+    database.doc(`Users/${userId}`).get().then((data) => {
+      if(data.exists) {
+        resolve(data.data());
+      }else {
+        reject("User not found");
+      }
+    }).catch((err) => {
+      if(err) reject(err);
+    })
   });
 }
 
@@ -74,9 +94,9 @@ export function getFlatMates(flatId) {
 
     var count = 0;
 
-    database.ref(`Flats/${flatId}/Flatmates`).once('value').then((snapshot) => {
+    database.collection(`Flats/${flatId}/Flatmates`).get().then((snapshot) => {
       snapshot.forEach((flatmate) => {
-        const data = flatmate.val();
+        const data = flatmate.data();
 
         container.flatmates.push({
           email: data.email,

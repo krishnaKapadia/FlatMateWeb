@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -45,11 +45,8 @@ ReactDOM.render((
     <PersistGate loading={null} persistor={persistor}>
       <HashRouter>
         <Switch>
-          <Route path="/login" name="Login" component={Login} />
-          <Route path="/register" name="Register" component={Register} />
-          <Route path="/dashboard" history={history} name="Home" component={Full} />
-          {/* <Redirect from="/" to="/register" /> */}
-          <Route path="/login" name="Login" component={Login} />
+          <Route path="/" history={history} name="Home" component={Full} />
+          {/* <Redirect from="/" to="/login" /> */}
         </Switch>
       </HashRouter>
     </PersistGate>

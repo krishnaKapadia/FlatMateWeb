@@ -48,13 +48,23 @@ class Header extends Component {
     console.log("LOGOUT");
 
     var _this = this;
-    auth.onAuthStateChanged((user) => {
-      if(user) {
-        // TODO set login is not defined in this scope
-        // _this.props.setLogin(false);
-        _this.props.history.push('/login');
-      }
+
+    signOut();
+
+    persistStore(this.context.store).purge().then((i) => {
+      _this.props.setLogin(false);
+      _this.props.history.push('/login');
     })
+    // TODO sign out not working for redirect
+    // this.props.dispatch( { type: 'RESET' });
+
+    // auth.onAuthStateChanged((user) => {
+    //   if(user) {
+    //     // TODO set login is not defined in this scope
+    //     // _this.props.setLogin(false);
+    //     _this.props.history.push('/login');
+    //   }
+    // })
   }
 
   render() {
@@ -120,4 +130,4 @@ Header.contextTypes = {
   store: PropTypes.object
 };
 
-export default connect()(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

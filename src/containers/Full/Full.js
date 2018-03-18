@@ -24,37 +24,48 @@ class Full extends Component {
   }
 
   componentWillMount() {
-    if(this.props.isLoggedIn) {
+    // if(this.props.isLoggedIn) {
       console.log(this.props.isLoggedIn);
-    }
+    // }
   }
 
   render() {
-    return (
-      <div className="app">
-        <Header history={this.props.history}/>
-        <div className="app-body">
-          <Sidebar {...this.props}/>
-          <main className="main">
-            <Breadcrumb />
-            <Container fluid>
-              <Switch>
-                {/* <Route path="/login" name="Login" component={Login} />
-                <Route path="/register" name="Register" component={Register} /> */}
-                {/* <Route path="/dashboard" name="Dashboard" component={Dashboard} />
-                <Route path="/chores" name="Chores" component={Chores} />
-                <Route path="/groceries" name="Groceries" component={GroceryList} />
-                <Route path="/FlatMates" name="FlatMates" component={FlatMates} /> */}
-                {/* <Redirect from="/" to="/register"/> */}
-              </Switch>
-            </Container>
-          </main>
-          <Aside />
-        </div>
 
-        <Footer />
-      </div>
-    );
+    if(this.props.isLoggedIn) {
+      return (
+        <div className="app">
+          <Header history={this.props.history}/>
+          <div className="app-body">
+            <Sidebar {...this.props}/>
+            <main className="main">
+              <Breadcrumb />
+              <Container fluid>
+                <Switch>
+                  <Route path="/dashboard" name="Dashboard" component={Dashboard} />
+                  <Route path="/chores" name="Chores" component={Chores} />
+                  <Route path="/groceries" name="Groceries" component={GroceryList} />
+                  <Route path="/FlatMates" name="FlatMates" component={FlatMates} />
+                  <Redirect from="/" to="/dashboard"/>
+                </Switch>
+              </Container>
+            </main>
+            <Aside />
+          </div>
+
+          <Footer />
+        </div>
+      );
+    } else {
+      return(
+        <div>
+          <Switch>
+            <Route path="/login" name="Login" component={Login} />
+            <Route path="/register" name="Register" component={Register} />
+            <Redirect from="/" to="/login"/>
+          </Switch>
+        </div>
+      );
+    }
   }
 }
 
