@@ -6,7 +6,8 @@ import { Row, Col, Card, CardBody, Button,
   TabContent, TabPane, Nav, NavItem, NavLink,
   Input, InputGroup, InputGroupAddon
 } from 'reactstrap';
-
+import { getChores } from "../../utils/firebase/firebase";
+import { connect } from 'react-redux';
 import QRCode from 'qrcode.react';
 import classnames from 'classnames';
 
@@ -28,11 +29,11 @@ class FlatMates extends Component {
   }
 
   componentDidMount() {
-    // TODO, connect to redux, use that local_user.flatKey for this query
     this.inviteUrl = `${this.props.local_user.flatKey}`;
+
     // Get flatmates
-    getFlatMates(this.flatId).then((res) => {
-      // console.log(res);
+    getFlatMates(this.props.local_user.flatKey).then((res) => {
+      console.log(res);
       this.setState({ flatmates: res.flatmates, size: res.size });
     });
   }
@@ -195,4 +196,14 @@ class FlatMates extends Component {
 
 }
 
-export default FlatMates;
+/**
+* Sets props to be accessed by the Login component from redux
+* global state, Variables & Objects
+*/
+function mapStateToProps(state) {
+  return {
+    local_user: state.local_user
+  }
+}
+
+export default connect(mapStateToProps)(FlatMates);

@@ -19,7 +19,6 @@ class Chores extends Component {
       newChoreTitle: ''
     }
 
-    this.flat = firebase.database().ref(`Flats/${this.flatId}/Chores`);
     this.addChore = this.addChore.bind(this);
     this.setChoreTitle = this.setChoreTitle.bind(this);
     this.toggle = this.toggle.bind(this);

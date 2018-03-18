@@ -2,7 +2,6 @@
 import * as Firebase from 'firebase';
 require("firebase/firestore");
 
-
 var database;
 
 const config = {
