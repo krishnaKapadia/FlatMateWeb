@@ -6,6 +6,7 @@ import { Row, Col, Card, CardBody, Button,
   TabContent, TabPane, Nav, NavItem, NavLink,
   Input, InputGroup, InputGroupAddon
 } from 'reactstrap';
+
 import QRCode from 'qrcode.react';
 import classnames from 'classnames';
 
@@ -21,13 +22,14 @@ class FlatMates extends Component {
       activeTab: 'qr'
     }
 
-    this.flatId = '-L6otCkBCNUL6n0dcSz1';
-    this.inviteUrl = `${this.flatId}`;
+    this.inviteUrl = ""
     this.toggleInvite = this.toggleInvite.bind(this);
     this.toggle = this.toggle.bind(this);
   }
 
   componentDidMount() {
+    // TODO, connect to redux, use that local_user.flatKey for this query
+    this.inviteUrl = `${this.props.local_user.flatKey}`;
     // Get flatmates
     getFlatMates(this.flatId).then((res) => {
       // console.log(res);
